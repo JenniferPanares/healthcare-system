@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Context } from "../index";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Context } from "../index"; // Context for authentication state
+import { Navigate, useNavigate } from "react-router-dom"; // Navigation hooks
 import axios from "axios";
 
 const AddNewAdmin = () => {
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context); // Authentication context
 
+  // State for form fields
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,23 +16,28 @@ const AddNewAdmin = () => {
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigateTo = useNavigate();
+  const navigateTo = useNavigate(); // Navigation hook
 
+  // Handle form submission
   const handleAddNewAdmin = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission behavior
     try {
+      // Send POST request to the API
       const res = await axios.post(
         "http://localhost:4000/api/v1/user/admin/addnew",
         { firstName, lastName, email, phone, nic, dob, gender, password },
         {
-          withCredentials: true,
+          withCredentials: true, // Include cookies for authentication
           headers: { "Content-Type": "application/json" },
         }
       );
-      console.log(res.data.message); // Log the success message
-      alert("Admin added successfully!"); // Optional: Show an alert
-      setIsAuthenticated(true);
-      navigateTo("/");
+
+      console.log(res.data.message); // Log success message
+      alert("Admin added successfully!"); // Show success alert
+      setIsAuthenticated(true); // Update authentication state
+      navigateTo("/"); // Navigate to the homepage
+
+      // Clear form fields
       setFirstName("");
       setLastName("");
       setEmail("");
@@ -41,11 +47,12 @@ const AddNewAdmin = () => {
       setGender("");
       setPassword("");
     } catch (error) {
-      console.error(error.response.data.message); // Log the error message
-      alert("Error adding admin. Please try again."); // Optional: Show an alert
+      console.error(error.response.data.message); // Log error message
+      alert("Error adding admin. Please try again."); // Show error alert
     }
   };
 
+  // Redirect to login page if not authenticated
   if (!isAuthenticated) {
     return <Navigate to={"/login"} />;
   }
@@ -53,9 +60,13 @@ const AddNewAdmin = () => {
   return (
     <section className="page">
       <section className="container form-component add-admin-form">
+        {/* Logo and title */}
         <img src="/logo.png" alt="logo" className="logo" />
         <h1 className="form-title">ADD NEW ADMIN</h1>
+
+        {/* Form for adding a new admin */}
         <form onSubmit={handleAddNewAdmin}>
+          {/* Name fields */}
           <div>
             <input
               type="text"
@@ -70,6 +81,8 @@ const AddNewAdmin = () => {
               onChange={(e) => setLastName(e.target.value)}
             />
           </div>
+
+          {/* Contact fields */}
           <div>
             <input
               type="text"
@@ -84,6 +97,8 @@ const AddNewAdmin = () => {
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>
+
+          {/* Identification and DOB fields */}
           <div>
             <input
               type="number"
@@ -98,6 +113,8 @@ const AddNewAdmin = () => {
               onChange={(e) => setDob(e.target.value)}
             />
           </div>
+
+          {/* Gender and Password fields */}
           <div>
             <select value={gender} onChange={(e) => setGender(e.target.value)}>
               <option value="">Select Gender</option>
@@ -111,6 +128,8 @@ const AddNewAdmin = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+
+          {/* Submit button */}
           <div style={{ justifyContent: "center", alignItems: "center" }}>
             <button type="submit">ADD NEW ADMIN</button>
           </div>

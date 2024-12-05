@@ -17,7 +17,7 @@ const Login = () => {
     try {
       await axios
         .post(
-          "http://localhost:4000/api/v1/user/login",
+          "http://localhost:5000/api/v1/user/login",
           { email, password, confirmPassword, role: "Patient" },
           {
             withCredentials: true,
@@ -25,6 +25,7 @@ const Login = () => {
           }
         )
         .then((res) => {
+          console.log("Cookies in browser:", document.cookie); // Log cookies
           console.log(res.data.message);
           setIsAuthenticated(true);
           navigateTo("/");
@@ -48,7 +49,7 @@ const Login = () => {
           <div className="card shadow p-4">
             <h2 className="text-center text-primary mb-4">Sign In</h2>
             <p className="text-center">
-              Please login to continue and access your account.
+              Please login to book an appointment
             </p>
             <form onSubmit={handleLogin}>
               <div className="mb-3">

@@ -1,8 +1,16 @@
-import React from "react";
-import Hero from "../components/Hero";
-import AppointmentForm from "../components/AppointmentForm";
+import React, { useContext } from "react";
+import { Navigate } from "react-router-dom"; 
+import Hero from "../components/Hero"; 
+import { Context } from "../index"; 
 
 const Appointment = () => {
+  const { isAuthenticated } = useContext(Context); // Get authentication state from context
+
+  // Redirect to login if the user is not authenticated
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <div className="container-fluid">
       {/* Hero Section */}
@@ -17,8 +25,14 @@ const Appointment = () => {
 
       {/* Appointment Form Section */}
       <div className="row justify-content-center mt-5">
-        <div className="col-md-8 col-lg-6">
-          <AppointmentForm />
+        <div className="col-md-8 col-lg-6 text-center">
+          <p className="lead">
+            You are now logged in. Navigate to the dashboard to schedule your
+            appointments.
+          </p>
+          <p>
+            Go to your <a href="/dashboard">Dashboard</a>.
+          </p>
         </div>
       </div>
     </div>

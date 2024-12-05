@@ -1,26 +1,26 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Context } from "../index";
+import { Context } from "../index"; // Context for authentication state
 import logo from "../assets/logo.png";
 
 const Navbar = () => {
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context); // Authentication context
+  const navigateTo = useNavigate(); // Navigation hook
 
-  const navigateTo = useNavigate();
-
+  // Handle user logout
   const handleLogout = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/v1/user/patient/logout", {
-        withCredentials: true,
+      await axios.get("http://localhost:5000/api/v1/user/patient/logout", {
+        withCredentials: true, // Include cookies for authentication
       });
-      console.log(res.data.message); // Log the success message
-      setIsAuthenticated(false);
+      setIsAuthenticated(false); // Update authentication state
     } catch (err) {
-      console.error(err.response?.data?.message || "An error occurred"); // Log the error message
+      console.error("Error during logout:", err); // Log any logout errors
     }
   };
 
+  // Navigate to the login page
   const goToLogin = () => {
     navigateTo("/login");
   };
@@ -49,21 +49,25 @@ const Navbar = () => {
         {/* Navbar Links */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
+            {/* Home Link */}
             <li className="nav-item">
               <Link to="/" className="nav-link">
                 Home
               </Link>
             </li>
+            {/* Appointment Link */}
             <li className="nav-item">
               <Link to="/appointment" className="nav-link">
                 Appointment
               </Link>
             </li>
+            {/* About Us Link */}
             <li className="nav-item">
               <Link to="/about" className="nav-link">
                 About Us
               </Link>
             </li>
+            {/* Conditional Login/Logout Button */}
             {isAuthenticated ? (
               <li className="nav-item">
                 <button className="btn btn-outline-danger ms-2" onClick={handleLogout}>

@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "helmet": "^8.0.0",
-    "react-multi-carousel": "^2.8.5"
-  }
-}

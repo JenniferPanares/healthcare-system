@@ -1,45 +1,33 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const AppointmentForm = () => {
+  // State for form data
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
-    nic: "",
     dob: "",
     gender: "",
     appointmentDate: "",
     department: "Pediatrics",
-    doctorFirstName: "",
-    doctorLastName: "",
     address: "",
     hasVisited: false,
   });
 
+  // Array of departments
   const departmentsArray = [
     "Pediatrics",
-    "Orthopedics",
     "Cardiology",
     "Neurology",
-   
+    "Orthopedics",
   ];
 
-  const [doctors, setDoctors] = useState([]);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
 
-  useEffect(() => {
-    const fetchDoctors = async () => {
-      const { data } = await axios.get("http://localhost:4000/api/v1/user/doctors", {
-        withCredentials: true,
-      });
-      setDoctors(data.doctors);
-    };
-    fetchDoctors();
-  }, []);
-
+  // Handle form field changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -48,46 +36,49 @@ const AppointmentForm = () => {
     });
   };
 
+  // Handle form submission
   const handleAppointment = async (e) => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/v1/appointment/post",
+        "http://localhost:5000/api/v1/appointment/post",
         formData,
         {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
       );
-      setSuccessMessage(data.message);
-      setErrorMessage("");
+      setSuccessMessage(data.message); // Show success message
+      setErrorMessage(""); // Clear error message
       setFormData({
         firstName: "",
         lastName: "",
         email: "",
         phone: "",
-        nic: "",
         dob: "",
         gender: "",
         appointmentDate: "",
         department: "Pediatrics",
-        doctorFirstName: "",
-        doctorLastName: "",
         address: "",
         hasVisited: false,
       });
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "An error occurred");
-      setSuccessMessage("");
+      setSuccessMessage(""); // Clear success message
     }
   };
+  
 
   return (
     <div className="container mt-5">
       <h2 className="text-center">Schedule an Appointment</h2>
+      {/* Display success or error messages */}
       {successMessage && <div className="alert alert-success">{successMessage}</div>}
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+      
+      {/* Appointment form */}
       <form onSubmit={handleAppointment}>
+        {/* Personal information fields */}
         <div className="row mb-3">
           <div className="col-md-6">
             <input
@@ -110,6 +101,8 @@ const AppointmentForm = () => {
             />
           </div>
         </div>
+        
+        {/* Contact and NIC information */}
         <div className="row mb-3">
           <div className="col-md-6">
             <input
@@ -132,51 +125,8 @@ const AppointmentForm = () => {
             />
           </div>
         </div>
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <input
-              type="text"
-              name="nic"
-              className="form-control"
-              placeholder="NIC"
-              value={formData.nic}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-6">
-            <input
-              type="date"
-              name="dob"
-              className="form-control"
-              placeholder="Date of Birth"
-              value={formData.dob}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <select
-              name="gender"
-              className="form-select"
-              value={formData.gender}
-              onChange={handleChange}
-            >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
-          <div className="col-md-6">
-            <input
-              type="date"
-              name="appointmentDate"
-              className="form-control"
-              value={formData.appointmentDate}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
+        
+        {/* Appointment and department details */}
         <div className="row mb-3">
           <div className="col-md-6">
             <select
@@ -185,6 +135,7 @@ const AppointmentForm = () => {
               value={formData.department}
               onChange={handleChange}
             >
+              {/* Populate departments */}
               {departmentsArray.map((dep, index) => (
                 <option key={index} value={dep}>
                   {dep}
@@ -192,34 +143,9 @@ const AppointmentForm = () => {
               ))}
             </select>
           </div>
-          <div className="col-md-6">
-            <select
-              name="doctor"
-              className="form-select"
-              value={`${formData.doctorFirstName} ${formData.doctorLastName}`}
-              onChange={(e) => {
-                const [firstName, lastName] = e.target.value.split(" ");
-                setFormData({
-                  ...formData,
-                  doctorFirstName: firstName,
-                  doctorLastName: lastName,
-                });
-              }}
-            >
-              <option value="">Select Doctor</option>
-              {doctors
-                .filter((doc) => doc.department === formData.department)
-                .map((doc, index) => (
-                  <option
-                    key={index}
-                    value={`${doc.firstName} ${doc.lastName}`}
-                  >
-                    {doc.firstName} {doc.lastName}
-                  </option>
-                ))}
-            </select>
-          </div>
         </div>
+
+        {/* Address and additional options */}
         <div className="mb-3">
           <textarea
             name="address"
@@ -240,6 +166,8 @@ const AppointmentForm = () => {
           />
           <label className="form-check-label">Have you visited us before?</label>
         </div>
+
+        {/* Submit button */}
         <button type="submit" className="btn btn-primary w-100">
           Schedule Appointment
         </button>

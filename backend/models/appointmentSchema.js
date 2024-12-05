@@ -4,74 +4,49 @@ import validator from "validator";
 const appointmentSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: [true, "First Name Is Required!"],
-    minLength: [3, "First Name Must Contain At Least 3 Characters!"],
+    required: [true, "First name is required"],
+    minLength: [3, "First name must be at least 3 characters"],
   },
   lastName: {
     type: String,
-    required: [true, "Last Name Is Required!"],
-    minLength: [3, "Last Name Must Contain At Least 3 Characters!"],
+    required: [true, "Last name is required"],
+    minLength: [3, "Last name must be at least 3 characters"],
   },
   email: {
     type: String,
-    required: [true, "Email Is Required!"],
-    validate: [validator.isEmail, "Provide A Valid Email!"],
+    required: [true, "Email is required"],
+    validate: [validator.isEmail, "Invalid email format"],
   },
   phone: {
     type: String,
-    required: [true, "Phone Is Required!"],
-    minLength: [11, "Phone Number Must Contain Exact 11 Digits!"],
-    maxLength: [11, "Phone Number Must Contain Exact 11 Digits!"],
-  },
-  nic: {
-    type: String,
-    required: [true, "NIC Is Required!"],
-    minLength: [13, "NIC Must Contain Only 13 Digits!"],
-    maxLength: [13, "NIC Must Contain Only 13 Digits!"],
+    required: [true, "Phone number is required"],
+    minLength: [7, "Phone number must be at least 7 digits"],
+    maxLength: [11, "Phone number can't exceed 11 digits"],
   },
   dob: {
     type: Date,
-    required: [true, "DOB Is Required!"],
+    required: [true, "Date of birth is required"],
   },
   gender: {
     type: String,
-    required: [true, "Gender Is Required!"],
+    required: [true, "Gender is required"],
     enum: ["Male", "Female"],
   },
   appointment_date: {
-    type: String,
-    required: [true, "Appointment Date Is Required!"],
+    type: Date,
+    required: [true, "Appointment date is required"],
   },
   department: {
     type: String,
-    required: [true, "Department Name Is Required!"],
+    required: [true, "Department is required"],
   },
-  doctor: {
-    firstName: {
-      type: String,
-      required: [true, "Doctor Name Is Required!"],
-    },
-    lastName: {
-      type: String,
-      required: [true, "Doctor Name Is Required!"],
-    },
+  address: {
+    type: String,
+    required: [true, "Address is required"],
   },
   hasVisited: {
     type: Boolean,
     default: false,
-  },
-  address: {
-    type: String,
-    required: [true, "Address Is Required!"],
-  },
-  doctorId: {
-    type: mongoose.Schema.ObjectId,
-    required: [true, "Doctor Id Is Invalid!"],
-  },
-  patientId: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: [true, "Patient Id Is Required!"],
   },
   status: {
     type: String,

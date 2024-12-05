@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import { Context } from "../index";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Context } from "../index"; // Context for authentication state
+import { Link, Navigate, useNavigate } from "react-router-dom"; // Routing utilities
 
 const Register = () => {
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context); // Authentication context
 
+  // State variables for form inputs
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,24 +16,27 @@ const Register = () => {
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigateTo = useNavigate();
+  const navigateTo = useNavigate(); // Navigation hook
 
+  // Handle form submission for registration
   const handleRegistration = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page reload
     try {
+      // Send registration details to API
       await axios
         .post(
-          "http://localhost:4000/api/v1/user/patient/register",
-          { firstName, lastName, email, phone, nic, dob, gender, password },
+          "http://localhost:5000/api/v1/user/patient/register",
+          { firstName, lastName, email, phone, nic, dob, gender, password }, // Payload
           {
-            withCredentials: true,
+            withCredentials: true, // Include cookies for authentication
             headers: { "Content-Type": "application/json" },
           }
         )
         .then((res) => {
-          console.log(res.data.message);
-          setIsAuthenticated(true);
-          navigateTo("/");
+          console.log(res.data.message); // Log success message
+          setIsAuthenticated(true); // Update auth state
+          navigateTo("/"); // Navigate to homepage
+          // Reset form fields
           setFirstName("");
           setLastName("");
           setEmail("");
@@ -43,10 +47,11 @@ const Register = () => {
           setPassword("");
         });
     } catch (error) {
-      console.error(error.response?.data?.message || "An error occurred");
+      console.error(error.response?.data?.message || "An error occurred"); // Log error message
     }
   };
 
+  // Redirect to homepage if the user is already authenticated
   if (isAuthenticated) {
     return <Navigate to={"/"} />;
   }
@@ -56,11 +61,15 @@ const Register = () => {
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
           <div className="card shadow p-4">
+            {/* Registration form header */}
             <h2 className="text-center text-primary mb-4">Sign Up</h2>
             <p className="text-center">
               Please fill in the form below to create an account.
             </p>
+
+            {/* Registration form */}
             <form onSubmit={handleRegistration}>
+              {/* Name fields */}
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label htmlFor="firstName" className="form-label">
@@ -89,6 +98,8 @@ const Register = () => {
                   />
                 </div>
               </div>
+
+              {/* Email field */}
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">
                   Email
@@ -102,6 +113,8 @@ const Register = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
+
+              {/* Mobile number field */}
               <div className="mb-3">
                 <label htmlFor="phone" className="form-label">
                   Mobile Number
@@ -115,6 +128,8 @@ const Register = () => {
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
+
+              {/* NIC field */}
               <div className="mb-3">
                 <label htmlFor="nic" className="form-label">
                   NIC
@@ -128,6 +143,8 @@ const Register = () => {
                   onChange={(e) => setNic(e.target.value)}
                 />
               </div>
+
+              {/* Date of Birth field */}
               <div className="mb-3">
                 <label htmlFor="dob" className="form-label">
                   Date of Birth
@@ -140,6 +157,8 @@ const Register = () => {
                   onChange={(e) => setDob(e.target.value)}
                 />
               </div>
+
+              {/* Gender field */}
               <div className="mb-3">
                 <label htmlFor="gender" className="form-label">
                   Gender
@@ -155,6 +174,8 @@ const Register = () => {
                   <option value="Female">Female</option>
                 </select>
               </div>
+
+              {/* Password field */}
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
                   Password
@@ -168,12 +189,16 @@ const Register = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
+
+              {/* Link to login page */}
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <p className="mb-0">Already Registered?</p>
                 <Link to="/signin" className="text-primary text-decoration-none">
                   Login Now
                 </Link>
               </div>
+
+              {/* Submit button */}
               <div className="d-grid">
                 <button type="submit" className="btn btn-primary">
                   Register

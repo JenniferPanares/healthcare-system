@@ -8,19 +8,26 @@ const Hero = ({ title, imageUrl }) => {
         <div className="row align-items-center">
           {/* Text Section */}
           <div className="col-md-6 mb-4">
+            {/* Display the title */}
             <h1 className="display-4 text-primary">{title}</h1>
+            {/* Description about the clinic */}
             <p className="lead">
-            JJK Medical Clinic is a modern healthcare facility devoted to delivering comprehensive and compassionate medical services. Our skilled team of professionals is dedicated to providing personalized care, tailored to meet the unique needs of each patient. At JJK, your well-being is our priority as we guide you on a seamless journey to achieving optimal health and wellness.
+              JJK Medical Clinic is a state-of-the-art healthcare facility
+              committed to delivering exceptional and compassionate medical
+              care. Our experienced team of professionals is dedicated to
+              providing personalized treatments designed to meet each patient’s
+              unique needs. 
             </p>
           </div>
 
           {/* Image Section */}
           <div className="col-md-6 text-center">
+            {/* Display the hero image */}
             <img
               src={hero}
               alt="hero"
               className="img-fluid rounded shadow"
-            />         
+            />
           </div>
         </div>
       </div>

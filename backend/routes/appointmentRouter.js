@@ -12,10 +12,16 @@ import {
 
 const appointmentRouter = express.Router();
 
-// Appointment routes
+// Route to post a new appointment (Patient only)
 appointmentRouter.post("/post", isPatientAuthenticated, postAppointment);
+
+// Route to get all appointments (Admin only)
 appointmentRouter.get("/getall", isAdminAuthenticated, getAllAppointments);
+
+// Route to update appointment status (Admin only)
 appointmentRouter.put("/update/:id", isAdminAuthenticated, updateAppointmentStatus);
+
+// Route to delete an appointment (Admin only)
 appointmentRouter.delete("/delete/:id", isAdminAuthenticated, deleteAppointment);
 
 export default appointmentRouter;
